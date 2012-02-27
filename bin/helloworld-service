@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# *************************************************************************
+# Copyright (c) 2009~ , BIGDATA. All Rights Reserved.
+# *************************************************************************
+
+# start or stop helloworld-service daemon.
+
+usage="Usage: helloworld-service (start|stop|start-cluster|stop-cluster)"
+
+bin=`dirname "$0"`
+bin=`cd "$bin"; pwd`
+
+# if no args specified, show usage.
+if [ $# -lt 1 ]; then
+  echo $usage
+  exit 1
+fi
+
+# get arguments of action.
+action=$1
+shift
+
+# run action
+case $action in
+  (start)
+    "$bin"/bigdata-daemon.sh --copts "$bin/helloworld-service-opts.sh" start com.bigdata.jsketch.HelloWorldService "$@"
+    ;;
+    
+  (stop)
+    "$bin"/bigdata-daemon.sh stop com.bigdata.jsketch.HelloWorldService
+    ;;
+  
+  (start-cluster)
+    "$bin"/bigdata-daemons.sh --copts "$bin/helloworld-service-opts.sh" start com.bigdata.jsketch.HelloWorldService "$@"
+    ;;
+    
+  (stop-cluster)
+    "$bin"/bigdata-daemons.sh stop com.bigdata.jsketch.HelloWorldService
+    ;;
+    
+  (*)
+    echo $usage
+    exit 1
+    ;;
+esac
